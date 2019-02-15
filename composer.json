@@ -7,6 +7,7 @@
             "email": "developer@citigo.net"
         }
     ],
+    "minimum-stability": "stable",
     "type": "project",
     "require": {
         "php": ">=5.4.0",
