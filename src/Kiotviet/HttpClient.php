@@ -14,8 +14,6 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class HttpClient
 {
-    protected $accessToken;
-    protected $retailer;
 
     /**
      * HttpClient constructor.
@@ -23,12 +21,6 @@ class HttpClient
      */
     public function __construct()
     {
-        $this->accessToken = Authentication::$accessToken;
-        $this->retailer = Authentication::$retailer;
-
-        if (empty($this->accessToken) || empty($this->retailer)) {
-            throw new \Exception('Missing access token, please check!');
-        }
     }
 
     /**
@@ -39,7 +31,7 @@ class HttpClient
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \Exception
      */
-    public function doRequest($method, $url, $params, $headers = [])
+    public function doRequest($method, $url, $params, $accessToken, $retailer, $headers = [])
     {
         $client = new Client();
 
@@ -47,8 +39,8 @@ class HttpClient
 
 
         $options['headers'] = [
-            'Retailer' => $this->retailer,
-            'Authorization' => 'Bearer ' . $this->accessToken
+            'Retailer' => $retailer,
+            'Authorization' => 'Bearer ' . $accessToken
         ];
 
         if (sizeof($headers) > 0) {
@@ -73,7 +65,7 @@ class HttpClient
         return $this->responseSuccess($response);
     }
 
-    private function responseSuccess($data)
+    public function responseSuccess($data)
     {
         return [
             'status' => 'success',
@@ -82,7 +74,7 @@ class HttpClient
         ];
     }
 
-    private function responseError($errors, $message)
+    public function responseError($errors, $message)
     {
         return [
             'status' => 'error',

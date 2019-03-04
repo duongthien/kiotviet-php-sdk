@@ -34,11 +34,6 @@ class Kiotviet
     protected $retailer;
 
     /**
-     * @var KiotvietConfig|null
-     */
-    protected $config;
-
-    /**
      * @var HttpClient
      */
     protected $client;
@@ -49,23 +44,19 @@ class Kiotviet
      * @param KiotvietConfig|null $config
      * @throws \Exception
      */
-    public function __construct(KiotvietConfig $config = null)
+    public function __construct()
     {
-        $this->config = $config;
-        
-        list($clientId, $clientSecret, $retailer) = $this->config->getConfig();
-        Authentication::getAccessToken($clientId, $clientSecret, $retailer);
-
-        //  Get access token before create new Http client
         $this->client = new HttpClient();
     }
 
     /**
      * @return mixed
      */
-    public function getAccessToken()
+    public function getAccessToken(KiotvietConfig $config)
     {
-        return Authentication::$accessToken;
+        list($clientId, $clientSecret, $retailer) = $config->getConfig();
+        $accessToken = Authentication::getAccessToken($clientId, $clientSecret, $retailer);
+        return $accessToken;
     }
 
     /**
@@ -82,9 +73,9 @@ class Kiotviet
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \Exception
      */
-    public function get($url, array $params)
+    public function get($url, array $params, $accessToken, $retailer)
     {
-        return $this->client->doRequest('GET', $url, $params);
+        return $this->client->doRequest('GET', $url, $params, $accessToken, $retailer);
     }
 
     /**
@@ -93,9 +84,9 @@ class Kiotviet
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \Exception
      */
-    public function post($url, array $params)
+    public function post($url, array $params, $accessToken, $retailer)
     {
-        return $this->client->doRequest('POST', $url, $params);
+        return $this->client->doRequest('POST', $url, $params, $accessToken, $retailer);
     }
 
     /**
@@ -104,9 +95,9 @@ class Kiotviet
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \Exception
      */
-    public function put($url, array $params)
+    public function put($url, array $params, $accessToken, $retailer)
     {
-        return $this->client->doRequest('PUT', $url, $params);
+        return $this->client->doRequest('PUT', $url, $params, $accessToken, $retailer);
     }
 
     /**
@@ -115,9 +106,9 @@ class Kiotviet
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
      * @throws \Exception
      */
-    public function delete($url, array $params)
+    public function delete($url, array $params, $accessToken, $retailer)
     {
-        return $this->client->doRequest('DELETE', $url, $params);
+        return $this->client->doRequest('DELETE', $url, $params, $accessToken, $retailer);
     }
 
 }

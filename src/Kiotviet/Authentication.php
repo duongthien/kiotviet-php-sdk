@@ -11,6 +11,7 @@ namespace Kiotviet\Kiotviet;
 
 use GuzzleHttp\Client;
 use Kiotviet\KiotvietEndpoint;
+use Kiotviet\Kiotviet\HttpClient;
 
 class Authentication
 {
@@ -36,14 +37,19 @@ class Authentication
                 'client_id' => $clientId,
                 'client_secret' => $clientSecret
             ];
+            try {
+                $response = $client->post(KiotvietEndpoint::GET_TOKEN, $options);
+                $response = $response->getBody()->getContents();
+                $response = json_decode($response, true);
+                self::$accessToken = $response['access_token'];
+                self::$expireIn = $response['expire_in'];
+                self::$retailer = $retailer;
+            } catch (GuzzleException $e) {
+                $HttpClient = new HttpClient();
+                return $HttpClient->responseError($e->getMessage(), 'Lỗi kết nối tới Kiotviet: ' . $e->getMessage());
+            }
 
-            $response = $client->post(KiotvietEndpoint::GET_TOKEN, $options);
-            $response = $response->getBody()->getContents();
-            $response = json_decode($response, true);
-
-            self::$accessToken = $response['access_token'];
-            self::$expireIn = $response['expire_in'];
-            self::$retailer = $retailer;
+            return $response;
         }
     }
 }

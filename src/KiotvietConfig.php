@@ -15,7 +15,7 @@ class KiotvietConfig
     protected $clientSecret;
     protected $retailer;
 
-    public function __construct($clientId, $clientSecret, $retailer)
+    public function __construct($clientId = null, $clientSecret = null, $retailer = null)
     {
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
