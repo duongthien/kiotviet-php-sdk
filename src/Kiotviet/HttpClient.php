@@ -27,11 +27,13 @@ class HttpClient
      * @param $method
      * @param $url
      * @param $params
+     * @param $accessToken
+     * @param $retailer
      * @param array $headers
+     * @param string $bodyType
      * @return mixed|\Psr\Http\Message\ResponseInterface|string
-     * @throws \Exception
      */
-    public function doRequest($method, $url, $params, $accessToken, $retailer, $headers = [])
+    public function doRequest($method, $url, $params, $accessToken, $retailer, $headers = [], $bodyType = '')
     {
         $client = new Client();
 
@@ -47,10 +49,14 @@ class HttpClient
             $options['headers'] = array_merge($options['headers'], $headers);
         }
 
-        if($method == 'GET'){
+        if ($method == 'GET') {
             $options['query'] = $params;
-        }else{
+        } else {
             $options['form_params'] = $params;
+        }
+
+        if ($bodyType == 'json') {
+            $option['json'] = $params;
         }
 
         try {

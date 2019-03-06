@@ -111,4 +111,17 @@ class Kiotviet
         return $this->client->doRequest('DELETE', $url, $params, $accessToken, $retailer);
     }
 
+    /**
+     * @param $method
+     * @param $url
+     * @param array $params
+     * @param $accessToken
+     * @param $retailer
+     * @return mixed|\Psr\Http\Message\ResponseInterface|string
+     */
+    public function raw($method, $url, array $params, $accessToken, $retailer)
+    {
+        return $this->client->doRequest($method, $url, $params, $accessToken, $retailer, [], 'json');
+    }
+
 }
