@@ -56,7 +56,8 @@ class HttpClient
         }
 
         if ($bodyType == 'json') {
-            $option['json'] = $params;
+            $options['json'] = $params;
+            $options['headers'] ['Content-Type'] = 'application/json';
         }
 
         try {
