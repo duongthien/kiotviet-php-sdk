@@ -74,12 +74,13 @@ class HttpClient
         ];
     }
 
-    public function responseError($errors, $message)
+    public function responseError($errors, $message, $errorCode = "")
     {
         return [
             'status' => 'error',
             'data' => null,
             'error' => $errors,
+            'errorCode' => $errorCode,
             'message' => $message
         ];
     }
